@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Петрин Роман — QA Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Onest:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080c10;
+  --bg2: #0e1419;
+  --card: #111820;
+  --card2: #161e28;
+  --border: #1e2d3d;
+  --border2: #243447;
+  --accent: #00e5a0;
+  --accent2: #00b87a;
+  --accent-dim: rgba(0,229,160,0.1);
+  --accent-glow: rgba(0,229,160,0.25);
+  --blue: #3d9be9;
+  --blue-dim: rgba(61,155,233,0.1);
+  --yellow: #f5c842;
+  --red: #ff5c5c;
+  --text: #e2eaf3;
+  --text2: #8fa8c4;
+  --text3: #4d6a87;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+
+body {
+  font-family: 'Onest', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+/* NOISE OVERLAY */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:0;
+  opacity:0.4;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 48px;
+  background: rgba(8,12,16,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 1px;
+}
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 13px;
+  color: var(--text2);
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: color 0.2s;
+  position: relative;
+}
+.nav-links a::after {
+  content:'';
+  position:absolute;
+  bottom:-3px;left:0;right:100%;
+  height:1px;background:var(--accent);
+  transition:right 0.3s;
+}
+.nav-links a:hover{color:var(--accent);}
+.nav-links a:hover::after{right:0;}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 120px 48px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(0,229,160,0.07) 0%, transparent 70%);
+  top: -100px; right: -100px;
+  pointer-events: none;
+}
+.hero-glow2 {
+  position: absolute;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(61,155,233,0.05) 0%, transparent 70%);
+  bottom: 0; left: 200px;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 80px;
+  align-items: center;
+}
+
+.hero-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-tag::before {
+  content: '';
+  width: 30px; height: 1px;
+  background: var(--accent);
+}
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--text);
+  margin-bottom: 10px;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+.hero h1 span { color: var(--accent); }
+
+.hero-role {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 16px;
+  color: var(--text2);
+  margin-bottom: 28px;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.cursor {
+  display: inline-block;
+  width: 2px; height: 18px;
+  background: var(--accent);
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: blink 1s infinite;
+}
+
+.hero-desc {
+  font-size: 15px;
+  color: var(--text2);
+  max-width: 500px;
+  line-height: 1.7;
+  margin-bottom: 36px;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.4s ease both;
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+  padding: 13px 28px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  transition: all 0.2s;
+  box-shadow: 0 0 30px var(--accent-glow);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 4px 40px var(--accent-glow);}
+.btn-outline {
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  padding: 13px 28px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+
+/* HERO CARD */
+.hero-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px;
+  animation: fadeUp 0.6s 0.2s ease both;
+  position: relative;
+  overflow: hidden;
+}
+.hero-card::before {
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;height:2px;
+  background: linear-gradient(90deg, var(--accent), var(--blue));
+}
+.avatar-area {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.avatar {
+  width: 60px; height: 60px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent-dim), var(--blue-dim));
+  border: 1px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--accent);
+}
+.avatar-info h3 {font-size:15px;font-weight:700;color:var(--text);}
+.avatar-info p {font-size:12px;color:var(--text2);margin-top:3px;}
+
+.contact-list { display: grid; gap: 12px; }
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text2);
+}
+.contact-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.contact-item a { color: var(--accent); text-decoration: none; }
+.contact-item a:hover { text-decoration: underline; }
+
+/* SECTIONS */
+section {
+  padding: 80px 48px;
+  position: relative;
+}
+.section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::before {
+  content:'';
+  width:24px; height:1px;
+  background: var(--accent);
+}
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(26px, 3vw, 38px);
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 48px;
+  line-height: 1.1;
+}
+
+/* SKILLS */
+#skills { background: var(--bg2); }
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+.skill-group {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.skill-group:hover {
+  border-color: var(--border2);
+  transform: translateY(-3px);
+}
+.skill-group-title {
+  font-size: 11px;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 16px;
+}
+.skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.skill-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+.tag-green { background: rgba(0,229,160,0.08); color: var(--accent); border-color: rgba(0,229,160,0.2); }
+.tag-blue { background: var(--blue-dim); color: var(--blue); border-color: rgba(61,155,233,0.2); }
+.tag-yellow { background: rgba(245,200,66,0.08); color: var(--yellow); border-color: rgba(245,200,66,0.2); }
+.tag-gray { background: var(--card2); color: var(--text2); border-color: var(--border); }
+
+/* EXPERIENCE */
+.timeline { position: relative; }
+.timeline::before {
+  content:'';
+  position:absolute;
+  left: 24px; top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--accent), var(--border), transparent);
+}
+.timeline-item {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+  position: relative;
+}
+.timeline-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  margin-top: 6px;
+  position: relative;
+  z-index: 1;
+  margin-left: 18px;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+.timeline-dot.dim {
+  border-color: var(--border2);
+  box-shadow: none;
+}
+.timeline-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 28px;
+  transition: border-color 0.2s;
+}
+.timeline-card:hover { border-color: var(--border2); }
+.timeline-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.timeline-company {
+  font-family: 'Syne', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+}
+.timeline-role {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.timeline-date {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--card2);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+.timeline-desc {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.7;
+}
+.timeline-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+
+/* EDUCATION */
+#education { background: var(--bg2); }
+.edu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+.edu-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.edu-card:hover { transform: translateY(-3px); border-color: var(--border2); }
+.edu-card::after {
+  content:'';
+  position:absolute;
+  bottom:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+.edu-year {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--border2);
+  line-height: 1;
+  margin-bottom: 14px;
+}
+.edu-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.edu-spec { font-size: 13px; color: var(--accent); font-weight: 600; margin-bottom: 6px; }
+.edu-place { font-size: 12px; color: var(--text2); }
+
+/* PORTFOLIO SECTION */
+.portfolio-banner {
+  background: linear-gradient(135deg, var(--card), var(--card2));
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  padding: 40px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+}
+.portfolio-banner::before {
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;height:2px;
+  background: linear-gradient(90deg, var(--accent), var(--blue));
+}
+.portfolio-banner h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.portfolio-banner p { font-size: 14px; color: var(--text2); }
+.portfolio-stats { display: flex; gap: 24px; flex-wrap: wrap; }
+.p-stat { text-align: center; }
+.p-stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+}
+.p-stat-label { font-size: 11px; color: var(--text3); margin-top: 4px; font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.5px; }
+
+/* FOOTER */
+footer {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 40px 48px;
+  text-align: center;
+  color: var(--text3);
+  font-size: 13px;
+}
+footer span { color: var(--accent); }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* RESPONSIVE */
+@media(max-width: 900px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+  .hero { padding: 100px 24px 60px; }
+  .hero-content { grid-template-columns: 1fr; gap: 40px; }
+  section { padding: 60px 24px; }
+  .portfolio-banner { padding: 28px 24px; flex-direction: column; align-items: flex-start; }
+  footer { padding: 32px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">rp.dev // QA</div>
+  <ul class="nav-links">
+    <li><a href="#skills">Навыки</a></li>
+    <li><a href="#experience">Опыт</a></li>
+    <li><a href="#education">Образование</a></li>
+    <li><a href="#portfolio">Портфолио</a></li>
+    <li><a href="mailto:romchikp@mail.ru">Связаться</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div>
+      <div class="hero-tag">Открыт к предложениям</div>
+      <h1>Петрин<br><span>Роман</span></h1>
+      <div class="hero-role">// Junior QA Engineer<span class="cursor"></span></div>
+      <p class="hero-desc">
+        Ручное тестирование веб-приложений и REST API. Работаю с Postman, Jira, SQL. Умею находить баги там, где разработчики не смотрят.
+      </p>
+      <div class="hero-actions">
+        <a href="mailto:romchikp@mail.ru" class="btn-primary">Написать письмо</a>
+        <a href="tel:+79278644373" class="btn-outline">+7 (927) 864-43-73</a>
+      </div>
+    </div>
+    <div class="hero-card fade-in">
+      <div class="avatar-area">
+        <div class="avatar">РП</div>
+        <div class="avatar-info">
+          <h3>Петрин Роман Сергеевич</h3>
+          <p>28 лет · Чебоксары</p>
+        </div>
+      </div>
+      <div class="contact-list">
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <span>Чебоксары, Россия · удалённо</span>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📱</div>
+          <a href="tel:+79278644373">+7 (927) 864-43-73</a>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <a href="mailto:romchikp@mail.ru">romchikp@mail.ru</a>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🚗</div>
+          <span>Права категории B</span>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">✈️</div>
+          <span>Готов к командировкам</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-label">Компетенции</div>
+    <div class="section-title">Навыки и инструменты</div>
+    <div class="skills-grid">
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">// Тестирование</div>
+        <div class="skill-tags">
+          <span class="skill-tag tag-green">Ручное тестирование</span>
+          <span class="skill-tag tag-green">Функциональное</span>
+          <span class="skill-tag tag-green">Регрессионное</span>
+          <span class="skill-tag tag-green">Кросс-браузерное</span>
+          <span class="skill-tag tag-green">Интеграционное</span>
+          <span class="skill-tag tag-green">Тест-дизайн</span>
+        </div>
+      </div>
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">// API & инструменты</div>
+        <div class="skill-tags">
+          <span class="skill-tag tag-blue">Postman</span>
+          <span class="skill-tag tag-blue">Swagger</span>
+          <span class="skill-tag tag-blue">REST API</span>
+          <span class="skill-tag tag-blue">Jira</span>
+          <span class="skill-tag tag-blue">Confluence</span>
+          <span class="skill-tag tag-blue">DBeaver</span>
+        </div>
+      </div>
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">// Разработка & DevOps</div>
+        <div class="skill-tags">
+          <span class="skill-tag tag-yellow">SQL</span>
+          <span class="skill-tag tag-yellow">Git</span>
+          <span class="skill-tag tag-yellow">Docker</span>
+          <span class="skill-tag tag-yellow">Kubernetes</span>
+          <span class="skill-tag tag-yellow">CI/CD</span>
+          <span class="skill-tag tag-yellow">Linux</span>
+        </div>
+      </div>
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">// Frontend & прочее</div>
+        <div class="skill-tags">
+          <span class="skill-tag tag-gray">HTML/CSS</span>
+          <span class="skill-tag tag-gray">MS Office</span>
+          <span class="skill-tag tag-gray">Командная строка</span>
+          <span class="skill-tag tag-gray">Аналитика</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-label">Карьера</div>
+    <div class="section-title">Опыт работы</div>
+    <div class="timeline">
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-head">
+            <div>
+              <div class="timeline-role">Manual QA Engineer</div>
+              <div class="timeline-company">quickoff</div>
+            </div>
+            <div class="timeline-date">сент. 2025 — март 2026</div>
+          </div>
+          <div class="timeline-desc">
+            Тестирование веб-приложений в рамках Agile/Scrum-команды. Составление тест-кейсов, чек-листов и баг-репортов. Верификация REST API через Postman и Swagger: проверка статус-кодов, схем ответов, граничных значений. Написание SQL-запросов для валидации данных в БД (SELECT, JOIN, GROUP BY). Запуск и мониторинг сборок через CI/CD-пайплайн, работа с Docker-контейнерами в тестовой среде.
+          </div>
+          <div class="timeline-tags">
+            <span class="skill-tag tag-green" style="font-size:11px;padding:3px 9px;">Postman</span>
+            <span class="skill-tag tag-green" style="font-size:11px;padding:3px 9px;">Swagger</span>
+            <span class="skill-tag tag-green" style="font-size:11px;padding:3px 9px;">Jira</span>
+            <span class="skill-tag tag-green" style="font-size:11px;padding:3px 9px;">SQL</span>
+            <span class="skill-tag tag-green" style="font-size:11px;padding:3px 9px;">Docker</span>
+            <span class="skill-tag tag-green" style="font-size:11px;padding:3px 9px;">Git</span>
+            <span class="skill-tag tag-green" style="font-size:11px;padding:3px 9px;">CI/CD</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-dot dim"></div>
+        <div class="timeline-card">
+          <div class="timeline-head">
+            <div>
+              <div class="timeline-role">Аналитик / Аккаунт-менеджер</div>
+              <div class="timeline-company">Яндекс.Доставка</div>
+            </div>
+            <div class="timeline-date">окт. 2024 — янв. 2026</div>
+          </div>
+          <div class="timeline-desc">
+            Работа с внутренними BI-дашбордами и CRM-системой для анализа метрик клиентов. Выгрузка и обработка данных по объёмам отправлений, формирование отчётов. Выявление аномалий в данных и передача задач на доработку продуктовой команде — первый опыт взаимодействия с QA и разработкой.
+          </div>
+          <div class="timeline-tags">
+            <span class="skill-tag tag-gray" style="font-size:11px;padding:3px 9px;">CRM</span>
+            <span class="skill-tag tag-gray" style="font-size:11px;padding:3px 9px;">BI-аналитика</span>
+            <span class="skill-tag tag-gray" style="font-size:11px;padding:3px 9px;">Excel / Google Sheets</span>
+            <span class="skill-tag tag-gray" style="font-size:11px;padding:3px 9px;">Работа с данными</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-dot dim"></div>
+        <div class="timeline-card">
+          <div class="timeline-head">
+            <div>
+              <div class="timeline-role">Операционный супервайзер</div>
+              <div class="timeline-company">Wildberries</div>
+            </div>
+            <div class="timeline-date">нояб. 2022 — нояб. 2023</div>
+          </div>
+          <div class="timeline-desc">
+            Работа с WMS-системой (Warehouse Management System) для управления складскими операциями. Контроль корректности данных в системе учёта товаров, выявление расхождений между физическим и цифровым состоянием склада. Опыт работы с корпоративным ПО высоконагруженной e-commerce платформы.
+          </div>
+          <div class="timeline-tags">
+            <span class="skill-tag tag-gray" style="font-size:11px;padding:3px 9px;">WMS</span>
+            <span class="skill-tag tag-gray" style="font-size:11px;padding:3px 9px;">Учётные системы</span>
+            <span class="skill-tag tag-gray" style="font-size:11px;padding:3px 9px;">e-commerce</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-dot dim"></div>
+        <div class="timeline-card">
+          <div class="timeline-head">
+            <div>
+              <div class="timeline-role">Специалист операционного сопровождения</div>
+              <div class="timeline-company">Банк ВТБ (ПАО)</div>
+            </div>
+            <div class="timeline-date">авг. 2021 — окт. 2022</div>
+          </div>
+          <div class="timeline-desc">
+            Работа с банковскими информационными системами: открытие и ведение счетов юридических лиц, верификация данных клиентов. Обработка операций в АБС (автоматизированная банковская система), контроль корректности транзакционных данных. Опыт работы с высоконагруженными корпоративными системами в строгой регуляторной среде.
+          </div>
+          <div class="timeline-tags">
+            <span class="skill-tag tag-gray" style="font-size:11px;padding:3px 9px;">АБС</span>
+            <span class="skill-tag tag-gray" style="font-size:11px;padding:3px 9px;">Верификация данных</span>
+            <span class="skill-tag tag-gray" style="font-size:11px;padding:3px 9px;">Корпоративные ИС</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-inner">
+    <div class="section-label">Обучение</div>
+    <div class="section-title">Образование</div>
+    <div class="edu-grid">
+      <div class="edu-card fade-in">
+        <div class="edu-year">2021</div>
+        <div class="edu-name">Московский гуманитарно-экономический институт</div>
+        <div class="edu-spec">Управление персоналом</div>
+        <div class="edu-place">Филиал, Чебоксары · Высшее образование</div>
+      </div>
+      <div class="edu-card fade-in">
+        <div class="edu-year">2018</div>
+        <div class="edu-name">Чебоксарский электромеханический колледж</div>
+        <div class="edu-spec">Прикладная информатика · Программист</div>
+        <div class="edu-place">МЦК ЧЭМК · Среднее специальное</div>
+      </div>
+      <div class="edu-card fade-in">
+        <div class="edu-year">2023</div>
+        <div class="edu-name">Курсы по ручному тестированию</div>
+        <div class="edu-spec">QA Engineer · Ручное тестирование</div>
+        <div class="edu-place">Повышение квалификации</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="section-inner">
+    <div class="section-label">Работы</div>
+    <div class="section-title">Портфолио</div>
+    <div class="portfolio-banner fade-in">
+      <div>
+        <h3>Тестирование REST API — reqres.in</h3>
+        <p>Полный цикл тестирования публичного API: чек-лист, тест-кейсы, баг-репорты</p>
+      </div>
+      <div class="portfolio-stats">
+        <div class="p-stat">
+          <div class="p-stat-num">20</div>
+          <div class="p-stat-label">чек-лист</div>
+        </div>
+        <div class="p-stat">
+          <div class="p-stat-num">14</div>
+          <div class="p-stat-label">тест-кейсов</div>
+        </div>
+        <div class="p-stat">
+          <div class="p-stat-num">4</div>
+          <div class="p-stat-label">баг-репорта</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Петрин Роман Сергеевич · <span>Junior QA Engineer</span> · Чебоксары · 2026</p>
+  <p style="margin-top:8px;">romchikp@mail.ru · +7 (927) 864-43-73</p>
+</footer>
+
+<script>
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Typing animation
+  const roles = ['// Junior QA Engineer', '// API Tester', '// Bug Hunter', '// Manual QA'];
+  let roleIndex = 0, charIndex = 0, deleting = false;
+  const roleEl = document.querySelector('.hero-role');
+
+  function typeRole() {
+    const current = roles[roleIndex];
+    if (!deleting) {
+      roleEl.innerHTML = current.slice(0, charIndex + 1) + '<span class="cursor"></span>';
+      charIndex++;
+      if (charIndex === current.length) { deleting = true; setTimeout(typeRole, 2000); return; }
+    } else {
+      roleEl.innerHTML = current.slice(0, charIndex - 1) + '<span class="cursor"></span>';
+      charIndex--;
+      if (charIndex === 0) { deleting = false; roleIndex = (roleIndex + 1) % roles.length; }
+    }
+    setTimeout(typeRole, deleting ? 50 : 80);
+  }
+  setTimeout(typeRole, 1000);
+</script>
+</body>
+</html>
